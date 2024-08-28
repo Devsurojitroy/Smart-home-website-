@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Controller</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="scripts.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Smart Home Controller</h1>
+        <button id="theme-toggle">Toggle Dark Mode</button>
+    </header>
+    <main>
+        <section id="lights">
+            <h2>Lights</h2>
+            <div class="control-panel">
+                <label for="light-room">Room:</label>
+                <select id="light-room">
+                    <option value="living-room">Living Room</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="kitchen">Kitchen</option>
+                </select>
+                <button id="toggle-lights">Toggle Lights</button>
+                <label for="light-dimmer">Dimmer:</label>
+                <input type="range" id="light-dimmer" min="0" max="100" value="100">
+                <span id="dimmer-value">100%</span>
+            </div>
+        </section>
+
+        <section id="thermostat">
+            <h2>Thermostat</h2>
+            <div class="control-panel">
+                <label for="thermostat-slider">Temperature:</label>
+                <input type="range" id="thermostat-slider" min="16" max="30" value="22">
+                <span id="temp-display">22°C</span>
+                <div id="thermostat-mode">
+                    <button data-mode="cool">Cool</button>
+                    <button data-mode="heat">Heat</button>
+                    <button data-mode="auto" class="active">Auto</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="security">
+            <h2>Security Cameras</h2>
+            <div class="control-panel">
+                <label for="camera-select">Select Camera:</label>
+                <select id="camera-select">
+                    <option value="front-door">Front Door</option>
+                    <option value="back-yard">Back Yard</option>
+                    <option value="garage">Garage</option>
+                </select>
+                <button id="toggle-camera">Toggle Camera</button>
+                <div id="camera-feed">
+                    <p>Camera Feed Simulation</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="notifications">
+            <h2>Notifications</h2>
+            <div class="control-panel">
+                <button id="enable-notifications">Enable Notifications</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
+
+
+css
+
+
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+h1 {
+    color: #333;
+}
+
+button {
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#theme-toggle {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+section {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type=range] {
+    width: 100%;
+}
+
+#dimmer-value, #temp-display {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#thermostat-mode button {
+    background-color: #ccc;
+    margin: 5px;
+    border-radius: 4px;
+}
+
+#thermostat-mode button.active {
+    background-color: #007BFF;
+    color: white;
+}
+
+#camera-feed {
+    background-color: #222;
+    color: #ddd;
+    text-align: center;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #f4f4f4;
+}
+
+.dark-mode section {
+    background: #444;
+}
+
+.dark-mode button {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .control-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+}
+
+
+
+
+JavaScript 
+
+
+
+// scripts.js
+
+// Toggle Dark Mode
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+// Toggle Lights
+const toggleLights = document.getElementById('toggle-lights');
+const dimmer = document.getElementById('light-dimmer');
+const dimmerValue = document.getElementById('dimmer-value');
+let lightsOn = true;
+
+toggleLights.addEventListener('click', () => {
+    lightsOn = !lightsOn;
+    document.body.style.backgroundColor = lightsOn ? '#f4f4f4' : '#1a1a1a';
+});
+
+dimmer.addEventListener('input', () => {
+    dimmerValue.textContent = `${dimmer.value}%`;
+    if (lightsOn) {
+        document.body.style.opacity = dimmer.value / 100;
+    }
+});
+
+// Thermostat Control
+const thermostatSlider = document.getElementById('thermostat-slider');
+const tempDisplay = document.getElementById('temp-display');
+const thermostatModeButtons = document.querySelectorAll('#thermostat-mode button');
+
+thermostatSlider.addEventListener('input', () => {
+    tempDisplay.textContent = `${thermostatSlider.value}°C`;
+});
+
+thermostatModeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        thermostatModeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+    });
+});
+
+// Security Camera Toggle
+const toggleCamera = document.getElementById('toggle-camera');
+const cameraFeed = document.getElementById('camera-feed');
+
+toggleCamera.addEventListener('click', () => {
+    cameraFeed.classList.toggle('active');
+    cameraFeed.textContent = cameraFeed.classList.contains('active') ? 'Camera On' : 'Camera Off';
+});
+
+// Enable Notifications (simulation)
+const enableNotifications = document.getElementById('enable-notifications');
+enableNotifications.addEventListener('click', () => {
+    alert('Notifications Enabled');
+});
+
+
